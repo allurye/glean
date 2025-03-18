@@ -1209,6 +1209,7 @@ def finish_files(files_to_write, args):
         while True:
             try:
                 log.debug("Writing output file : %s" % k)
+                os.makedirs(os.path.dirname(k), exist_ok=True)
                 with safe_open(k, 'w') as outfile:
                     outfile.write(files_to_write[k])
                 log.debug(" ... done")
