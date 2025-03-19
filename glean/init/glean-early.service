@@ -3,6 +3,7 @@ Description=Early glean execution
 Before=network-pre.target
 Wants=network-pre.target
 After=local-fs.target
+After=dev-sr0.device
 
 [Service]
 Type=oneshot
