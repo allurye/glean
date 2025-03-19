@@ -1634,18 +1634,12 @@ def main(argv=None):
     with systemlock.Lock('/tmp/glean.lock'):
         config_drive = os.path.join(args.root, 'mnt/config')
         meta_data_path = '%s/openstack/latest/meta_data.json' % config_drive
-
-        deadline = time.time() + 120
-        while True:
-            if os.path.exists(meta_data_path):
-                meta_data = json.load(open(meta_data_path))
-                log.debug("metadata loaded from: %s" % meta_data_path)
-                break
-            if time.time() > deadline:
-                log.debug("No meta_data.json found")
-                meta_data = {}
-                break
-            time.sleep(1)
+        if not os.path.exists(meta_data_path):
+            log.debug("No meta_data.json found")
+            meta_data = {}
+        else:
+            meta_data = json.load(open(meta_data_path))
+            log.debug("metadata loaded from: %s" % meta_data_path)
 
         if args.ssh:
             write_ssh_keys(args, meta_data)
